@@ -13,8 +13,42 @@ public enum TextAttribute: Codable {
     case strikethroughColor(UIColor)
     
     case lineBreakMode(NSLineBreakMode)
-    case lineSpacing(Float)
+    case lineSpacing(CGFloat)
     case textAlignment(NSTextAlignment)
+    
+    var value: Any {
+        switch self {
+        case .font(let font):
+            return font
+        case .foregroundColor(let color):
+            return color.cgColor
+        case .backgroundColor(let color):
+            return color.cgColor
+        case .kern(let kerning):
+            return kerning
+        case .underlineStyle(let style):
+            return style.rawValue
+        case .underlineColor(let color):
+            return color.cgColor
+        case .strikethroughStyle(let style):
+            return style.rawValue
+        case .strikethroughColor(let color):
+            return color.cgColor
+            
+        case .lineBreakMode(let lineBreakMode):
+            let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+            style.lineBreakMode = lineBreakMode
+            return style
+        case .lineSpacing(let lineSpacing):
+            let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+            style.lineSpacing = lineSpacing
+            return style
+        case .textAlignment(let alignment):
+            let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+            style.alignment = alignment
+            return style
+        }
+    }
     
     var key: NSAttributedString.Key { style.key }
     
@@ -123,7 +157,7 @@ public enum TextAttribute: Codable {
             let rawValue = try container.decode(Int.self, forKey: .value)
             self = .lineBreakMode(NSLineBreakMode(rawValue: rawValue) ?? NSLineBreakMode.byWordWrapping)
         case .lineSpacing:
-            self = .lineSpacing(try container.decode(Float.self, forKey: .value))
+            self = .lineSpacing(try container.decode(CGFloat.self, forKey: .value))
         case .textAlignment:
             let rawValue = try container.decode(Int.self, forKey: .value)
             self = .textAlignment(NSTextAlignment(rawValue: rawValue) ?? .justified)

@@ -2,12 +2,16 @@ import XCTest
 import TextAttribute
 
 class TextAttributeTests: XCTestCase {
-    func testEnumerateRanges() {
-        let string = "The quick brown fox jumped over the lazy brown dog".attributed().mutable
-        string.enumerateOccrrences(of: "brown") { attributedString, range in
-            attributedString = NSMutableAttributedString(string: "brown and red")
-        }
-        print("Updated: '\(string)'")
+    private let string = "The quick brown fox jumped over the lazy brown dog".attributed().mutable
+        
+    func test_AddAttribute_occurences() {
+        let result = string.addAttribute(.foregroundColor(.red), toOccurencesOfString: "brown")
+        print("Updated: '\(result)'")
+    }
+    
+    func test_AddAttributes_ccurences() {
+        let result = string.addAttributes([.foregroundColor(.red), .underlineStyle(.single)], toOccurencesOfString: "brown")
+        print("Updated: '\(result)'")
     }
 }
 

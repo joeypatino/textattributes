@@ -14,7 +14,7 @@ internal extension NSMutableAttributedString {
     
     func replaceCharacters(in range: Range<String.Index>, with attrString: NSAttributedString) {
         let nsRange = NSRange(location: string.distance(from: string.startIndex, to: range.lowerBound), length: string.distance(from: range.lowerBound, to: range.upperBound))
-        return replaceCharacters(in: nsRange, with: attrString)
+        replaceCharacters(in: nsRange, with: attrString)
     }
 
     func addAttribute(_ attr: NSAttributedString.Key, value: Any, range: Range<String.Index>? = nil) {
@@ -22,7 +22,7 @@ internal extension NSMutableAttributedString {
         addAttribute(attr, value: value, range: nsRange)
     }
     
-    func addingAttributes(_ attrs: [NSAttributedString.Key: Any], range: Range<String.Index>? = nil) {
+    func addAttributes(_ attrs: [NSAttributedString.Key: Any], range: Range<String.Index>? = nil) {
         let nsRange = range.map { NSRange(location: string.distance(from: string.startIndex, to: $0.lowerBound), length: string.distance(from: $0.lowerBound, to: $0.upperBound)) } ?? NSRange(location: 0, length: length)
         addAttributes(attrs, range: nsRange)
     }
@@ -35,7 +35,7 @@ public extension NSAttributedString {
     
     func addingAttributes(_ attrs: [TextAttribute], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
         let string = mutable
-        
+        string.addAttributes(attrs, in: inRange)
         return NSAttributedString(attributedString: string)
     }
 
@@ -45,7 +45,7 @@ public extension NSAttributedString {
     
     func addingAttributes(_ attrs: [TextAttribute], toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
         let string = mutable
-
+        string.addAttributes(attrs, toOccurencesOfString: aString, options: opts, in: inRange)
         return NSAttributedString(attributedString: string)
     }
 
@@ -55,7 +55,7 @@ public extension NSAttributedString {
     
     func removingAttributes(_ attrs: [TextAttribute.Style], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
         let string = mutable
-        
+        string.removeAttributes(attrs, in: inRange)
         return NSAttributedString(attributedString: string)
     }
 }
