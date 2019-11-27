@@ -1,6 +1,6 @@
 import Foundation
 
-internal extension String {
+public extension String {
     func attributed() -> NSAttributedString {
         return NSAttributedString(string: self)
     }

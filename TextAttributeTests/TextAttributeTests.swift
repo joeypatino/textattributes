@@ -3,12 +3,15 @@ import TextAttribute
 
 class TextAttributeTests: XCTestCase {
     private let string = "The quick brown fox jumped over the lazy brown dog".attributed().mutable
-        
-    func test_encodeAttributes() {
+    private var shadow: NSShadow {
         let shadow = NSShadow()
         shadow.shadowBlurRadius = 1.0
         shadow.shadowOffset = CGSize(width: 1, height: -1)
         shadow.shadowColor = UIColor.red
+        return shadow
+    }
+
+    func test_encodeAttributes() {
         let attributes: [TextAttribute] = [.shadow(shadow), .foregroundColor(.red), .underlineStyle(.single), .lineSpacing(6.0), .textAlignment(.center)]
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted

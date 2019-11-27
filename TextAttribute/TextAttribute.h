@@ -1,11 +1,3 @@
-//
-//  TextAttribute.h
-//  TextAttribute
-//
-//  Created by Joseph Patino on 11/27/19.
-//  Copyright © 2019 Joseph Patino. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 //! Project version number for TextAttribute.
