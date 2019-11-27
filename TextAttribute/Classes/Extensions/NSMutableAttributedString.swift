@@ -1,13 +1,15 @@
 import UIKit
 
 public extension NSMutableAttributedString {
-    @discardableResult
-    func addAttribute(_ attr: TextAttribute, in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    /// Adds the `TextAttribute` to the `NSMutableAttributedString` and returns self,
+    /// optionally restricted to `inRange`
+    @discardableResult func addAttribute(_ attr: TextAttribute,
+                                         in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         return addAttributes([attr], in: inRange)
     }
     
-    @discardableResult
-    func addAttributes(_ attrs: [TextAttribute], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    @discardableResult func addAttributes(_ attrs: [TextAttribute],
+                                          in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         let reduced = attrs.reduce(into: [NSAttributedString.Key: Any]()) { result, attribute in
             switch attribute {
             case .textAlignment, .lineSpacing, .lineBreakMode:
@@ -43,26 +45,34 @@ public extension NSMutableAttributedString {
         return self
     }
     
-    @discardableResult
-    func addAttribute(_ attr: TextAttribute, toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    /// Adds the `TextAttribute`s to all occurrences matching `aString` in the `NSMutableAttributedString` and returns self,
+    /// optionally restricted to `inRange`
+    @discardableResult func addAttribute(_ attr: TextAttribute,
+                                         toOccurencesOfString aString: String,
+                                         options opts: String.CompareOptions = [],
+                                         in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         return addAttributes([attr], toOccurencesOfString: aString, options: opts, in: inRange)
     }
     
-    @discardableResult
-    func addAttributes(_ attrs: [TextAttribute], toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    @discardableResult func addAttributes(_ attrs: [TextAttribute],
+                                          toOccurencesOfString aString: String,
+                                          options opts: String.CompareOptions = [],
+                                          in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         enumerateOccurrences(of: aString, options: opts, in: inRange) { attributedString, range in
             attributedString.addAttributes(attrs)
         }
         return self
     }
     
-    @discardableResult
-    func removeAttribute(_ attr: TextAttribute.Style, in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    /// Removes the `TextAttribute.Style` from the `NSMutableAttributedString` and returns self,
+    /// optionally restricted to `inRange`
+    @discardableResult func removeAttribute(_ attr: TextAttribute.Style,
+                                            in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         return removeAttributes([attr], in: inRange)
     }
     
-    @discardableResult
-    func removeAttributes(_ attrs: [TextAttribute.Style], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
+    @discardableResult func removeAttributes(_ attrs: [TextAttribute.Style],
+                                             in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
         attrs.forEach { attr in
             enumerateAttribute(attr, in: inRange) { attribute, range in
                 removeAttribute(attr.key, range: range)
@@ -70,48 +80,23 @@ public extension NSMutableAttributedString {
         }
         return self
     }
-}
-
-internal extension NSMutableAttributedString {
-    func enumerateAttribute(_ attr: TextAttribute.Style,
-                            options opts: NSAttributedString.EnumerationOptions = [],
-                            in inRange: Range<String.Index>? = nil, using block: (Any?, Range<String.Index>) -> Void) {
-        let nsRange = inRange.map { NSRange(location: string.distance(from: string.startIndex, to: $0.lowerBound), length: string.distance(from: $0.lowerBound, to: $0.upperBound)) } ?? NSRange(location: 0, length: length)
-        enumerateAttribute(attr.key, in: nsRange, options: opts) { attribute, range, stop in
-            let start = string.index(string.startIndex, offsetBy: range.location)
-            let end = string.index(string.startIndex, offsetBy: range.location + range.length)
-            block(attribute, start..<end)
-        }
+    
+    /// Removes the `TextAttribute.Style` from all occurrences matching `aString` in the `NSMutableAttributedString` and returns self,
+    /// optionally restricted to `inRange`
+    @discardableResult func removeAttribute(_ attr: TextAttribute.Style,
+                                            fromOccurencesOfString aString: String,
+                                            options opts: String.CompareOptions = [],
+                                            in inRange: Range<String.Index>? = nil) -> NSAttributedString {
+        return removeAttributes([attr], fromOccurencesOfString: aString, options: opts, in: inRange)
     }
     
-    func enumerateOccurrences(of aString: String,
-                              options opts: String.CompareOptions = [],
-                              in inRange: Range<String.Index>? = nil,
-                              using block: (inout NSMutableAttributedString, Range<String.Index>) -> Void) {
-        let range = inRange ?? string.startIndex..<string.index(string.startIndex, offsetBy: length)
-        var start = range.lowerBound
-        let end = range.upperBound
-        let slice = string[range]
-        var substringRanges:[Range<String.Index>] = []
-        while let subrange = slice.range(of: aString, options: opts, range: start..<end) {
-            substringRanges.append(subrange)
-            start = subrange.upperBound
-            if start == end { break }
+    @discardableResult func removeAttributes(_ attrs: [TextAttribute.Style],
+                                             fromOccurencesOfString aString: String,
+                                             options opts: String.CompareOptions = [],
+                                             in inRange: Range<String.Index>? = nil) -> NSAttributedString {
+        enumerateOccurrences(of: aString, options: opts, in: inRange) { attributedString, range in
+            attributedString.removeAttributes(attrs)
         }
-        
-        var offset = 0
-        substringRanges.forEach { range in
-            
-            let substringStart = string.index(range.lowerBound, offsetBy: offset)
-            let substringEnd = string.index(range.upperBound, offsetBy: offset)
-            var substring = attributedSubstring(from: substringStart..<substringEnd).mutable
-            let len = substring.length
-            block(&substring, range)
-            
-            let replacementStart = string.index(range.lowerBound, offsetBy: offset)
-            let replacementEnd = string.index(range.upperBound, offsetBy: offset)
-            replaceCharacters(in: replacementStart..<replacementEnd, with: substring)
-            offset = offset + (substring.length - len)
-        }
+        return self
     }
 }

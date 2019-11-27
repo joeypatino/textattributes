@@ -11,7 +11,7 @@ Sphinx of black quartz, judge my vow.
 How vexingly quick daft zebras jump!
 The five boxing wizards jump quickly.
 Pack my box with five dozen liquor jugs.
-""".attributed()
+""".attributed().addingAttributes([.font(.boldSystemFont(ofSize: 22.0)), .lineSpacing(8.0), .kern(2.0), .textAlignment(.center)])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +20,15 @@ Pack my box with five dozen liquor jugs.
         view.addSubview(label)
         label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        label.numberOfLines = 0
-        
+        label.numberOfLines = 0        
         label.attributedText = string
-            .addingAttributes([.font(.boldSystemFont(ofSize: 22.0)), .lineSpacing(8.0), .kern(2.0), .textAlignment(.center)])
-            .addingAttribute(.foregroundColor(UIColor.black.withAlphaComponent(0.2)), toOccurencesOfString: "[aeiou]", options: [.regularExpression])
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        label.attributedText = string.addingAttribute(.foregroundColor(UIColor.black.withAlphaComponent(0.2)), toOccurencesOfString: "[aeiou]", options: [.regularExpression])
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        label.attributedText = string.removingAttribute(.foregroundColor, fromOccurencesOfString: "[aeiou]", options: [.regularExpression])
     }
 }
