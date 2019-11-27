@@ -2,8 +2,7 @@ import Foundation
 
 public extension NSMutableAttributedString {
     func addiAttribute(_ attr: TextAttribute, in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
-        
-        return self
+        return addAttributes([attr], in: inRange)
     }
     
     func addAttributes(_ attrs: [TextAttribute], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
@@ -12,18 +11,18 @@ public extension NSMutableAttributedString {
     }
 
     func addAttribute(_ attr: TextAttribute, toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
-        
-        return self
+        return addAttributes([attr], toOccurencesOfString: aString, options: opts, in: inRange)
     }
     
     func addAttributes(_ attrs: [TextAttribute], toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
-        
+        enumerateOccrrences(of: aString, options: opts, in: inRange) { attributedString, range in
+            
+        }
         return self
     }
 
     func removeAttribute(_ attr: TextAttribute.Style, in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
-        
-        return self
+        return removeAttributes([attr], in: inRange)
     }
     
     func removeAttributes(_ attrs: [TextAttribute.Style], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {

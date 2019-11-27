@@ -30,9 +30,7 @@ internal extension NSMutableAttributedString {
 
 public extension NSAttributedString {
     func addingAttribute(_ attr: TextAttribute, in inRange: Range<String.Index>? = nil) -> NSAttributedString {
-        let string = mutable
-
-        return NSAttributedString(attributedString: string)
+        return mutable.addAttributes([attr], in: inRange)
     }
     
     func addingAttributes(_ attrs: [TextAttribute], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
@@ -42,9 +40,7 @@ public extension NSAttributedString {
     }
 
     func addingAttribute(_ attr: TextAttribute, toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
-        let string = mutable
-
-        return NSAttributedString(attributedString: string)
+        return mutable.addingAttributes([attr], toOccurencesOfString: aString, options: opts, in: inRange)
     }
     
     func addingAttributes(_ attrs: [TextAttribute], toOccurencesOfString aString: String, options opts: String.CompareOptions = [], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
@@ -54,9 +50,7 @@ public extension NSAttributedString {
     }
 
     func removingAttribute(_ attr: TextAttribute.Style, in inRange: Range<String.Index>? = nil) -> NSAttributedString {
-        let string = mutable
-        
-        return NSAttributedString(attributedString: string)
+        mutable.removingAttributes([attr], in: inRange)
     }
     
     func removingAttributes(_ attrs: [TextAttribute.Style], in inRange: Range<String.Index>? = nil) -> NSAttributedString {
