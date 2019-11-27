@@ -23,6 +23,8 @@ public extension NSMutableAttributedString {
                 break
             case .kern:
                 break
+            case .shadow:
+                break
             case .strikethroughColor:
                 break
             case .strikethroughStyle:
@@ -30,6 +32,8 @@ public extension NSMutableAttributedString {
             case .underlineColor:
                 break
             case .underlineStyle:
+                break
+            case .link:
                 break
             }
             result[attribute.key] = attribute.value

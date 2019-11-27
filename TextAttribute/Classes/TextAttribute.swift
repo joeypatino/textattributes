@@ -3,10 +3,11 @@ import UIKit
 public typealias NSStrikeThroughStyle = NSUnderlineStyle
 public enum TextAttribute: Codable {
     case font(UIFont)
+    case kern(Float)
     case foregroundColor(UIColor)
     case backgroundColor(UIColor)
     
-    case kern(Float)
+    case shadow(NSShadow)
     case underlineStyle(NSUnderlineStyle)
     case underlineColor(UIColor)
     case strikethroughStyle(NSStrikeThroughStyle)
@@ -16,16 +17,21 @@ public enum TextAttribute: Codable {
     case lineSpacing(CGFloat)
     case textAlignment(NSTextAlignment)
     
+    case link(URL)
+    
     var value: Any {
         switch self {
         case .font(let font):
             return font
+        case .kern(let kerning):
+            return kerning
         case .foregroundColor(let color):
             return color.cgColor
         case .backgroundColor(let color):
             return color.cgColor
-        case .kern(let kerning):
-            return kerning
+        
+        case .shadow(let shadow):
+            return shadow
         case .underlineStyle(let style):
             return style.rawValue
         case .underlineColor(let color):
@@ -47,6 +53,8 @@ public enum TextAttribute: Codable {
             let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             style.alignment = alignment
             return style
+        case .link(let url):
+            return url
         }
     }
     
@@ -56,12 +64,15 @@ public enum TextAttribute: Codable {
         switch self {
         case .font:
             return .font
+        case .kern:
+            return .kern
         case .foregroundColor:
             return .foregroundColor
         case .backgroundColor:
             return .backgroundColor
-        case .kern:
-            return .kern
+        
+        case .shadow:
+            return .shadow
         case .underlineStyle:
             return .underlineStyle
         case .underlineColor:
@@ -77,15 +88,18 @@ public enum TextAttribute: Codable {
             return .lineSpacing
         case .textAlignment:
             return .textAlignment
+        case .link:
+            return .link
         }
     }
     
     public enum Style: String, Codable {
         case font
+        case kern
         case foregroundColor
         case backgroundColor
         
-        case kern
+        case shadow
         case underlineStyle
         case underlineColor
         case strikethroughStyle
@@ -94,6 +108,8 @@ public enum TextAttribute: Codable {
         case lineBreakMode
         case lineSpacing
         case textAlignment
+        
+        case link
         
         var key: NSAttributedString.Key {
             switch self {
@@ -105,6 +121,9 @@ public enum TextAttribute: Codable {
                 return .backgroundColor
             case .kern:
                 return .kern
+            
+            case .shadow:
+                return .shadow
             case .underlineStyle:
                 return .underlineStyle
             case .underlineColor:
@@ -120,6 +139,9 @@ public enum TextAttribute: Codable {
                 return .paragraphStyle
             case .textAlignment:
                 return .paragraphStyle
+            
+            case .link:
+                return .link
             }
         }
     }
@@ -136,12 +158,15 @@ public enum TextAttribute: Codable {
         switch type {
         case .font:
             self = .font(try container.decode(Font.self, forKey: .value).uiFont)
+        case .kern:
+            self = .kern(try container.decode(Float.self, forKey: .value))
         case .foregroundColor:
             self = .foregroundColor(try container.decode(Color.self, forKey: .value).uiColor)
         case .backgroundColor:
             self = .backgroundColor(try container.decode(Color.self, forKey: .value).uiColor)
-        case .kern:
-            self = .kern(try container.decode(Float.self, forKey: .value))
+        
+        case .shadow:
+            self = .shadow(try container.decode(Shadow.self, forKey: .value).nsShadow)
         case .underlineStyle:
             let rawValue = try container.decode(Int.self, forKey: .value)
             self = .underlineStyle(NSUnderlineStyle(rawValue: rawValue))
@@ -161,6 +186,9 @@ public enum TextAttribute: Codable {
         case .textAlignment:
             let rawValue = try container.decode(Int.self, forKey: .value)
             self = .textAlignment(NSTextAlignment(rawValue: rawValue) ?? .justified)
+        
+        case .link:
+            self = .link(try container.decode(URL.self, forKey: .value))
         }
     }
     
@@ -171,12 +199,15 @@ public enum TextAttribute: Codable {
         switch self {
         case .font(let font):
             try container.encode(Font(font: font), forKey: .value)
+        case .kern(let kern):
+            try container.encode(kern, forKey: .value)
         case .foregroundColor(let color):
             try container.encode(Color(color: color), forKey: .value)
         case .backgroundColor(let color):
             try container.encode(Color(color: color), forKey: .value)
-        case .kern(let kern):
-            try container.encode(kern, forKey: .value)
+        
+        case .shadow(let shadow):
+            try container.encode(Shadow(shadow: shadow), forKey: .value)
         case .underlineStyle(let style):
             try container.encode(style.rawValue, forKey: .value)
         case .underlineColor(let color):
@@ -192,6 +223,9 @@ public enum TextAttribute: Codable {
             try container.encode(spacing, forKey: .value)
         case .textAlignment(let style):
             try container.encode(style.rawValue, forKey: .value)
+            
+        case .link(let url):
+            try container.encode(url, forKey: .value)
         }
     }
 }
@@ -264,5 +298,40 @@ internal struct Font: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(uiFont.fontName, forKey: .name)
         try container.encode(uiFont.pointSize, forKey: .size)
+    }
+}
+
+internal struct Shadow: Codable {
+    public let nsShadow: NSShadow
+        
+    public init(shadow: NSShadow) {
+        self.nsShadow = shadow
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case blur
+        case offset
+        case color
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let blur = try container.decode(CGFloat.self, forKey: .blur)
+        let offset = try container.decode(CGSize.self, forKey: .blur)
+        let color = try container.decodeIfPresent(Color.self, forKey: .color)?.uiColor
+        nsShadow = NSShadow()
+        nsShadow.shadowBlurRadius = blur
+        nsShadow.shadowOffset = offset
+        nsShadow.shadowColor = color?.cgColor
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(nsShadow.shadowBlurRadius, forKey: .blur)
+        try container.encode(nsShadow.shadowOffset, forKey: .offset)
+        
+        if let shadowColor = nsShadow.shadowColor as? UIColor {
+            try container.encode(Color(color: shadowColor), forKey: .color)
+        }
     }
 }
