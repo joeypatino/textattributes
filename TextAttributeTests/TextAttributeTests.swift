@@ -5,13 +5,19 @@ class TextAttributeTests: XCTestCase {
     private let string = "The quick brown fox jumped over the lazy brown dog".attributed().mutable
         
     func test_AddAttribute_occurences() {
-        let result = string.addAttribute(.foregroundColor(.red), toOccurencesOfString: "brown")
-        print("Updated: '\(result)'")
+        string.addAttribute(.foregroundColor(.red), toOccurencesOfString: "brown")
+        print("Updated: '\(string)'")
     }
     
-    func test_AddAttributes_ccurences() {
-        let result = string.addAttributes([.foregroundColor(.red), .underlineStyle(.single)], toOccurencesOfString: "brown")
-        print("Updated: '\(result)'")
+    func test_AddAttributes_occurences() {
+        string.addAttributes([.foregroundColor(.red), .underlineStyle(.single)], toOccurencesOfString: "brown")
+        print("Updated: '\(string)'")
+    }
+    
+    func test_RemoveAttributes() {
+        string.addAttributes([.foregroundColor(.red), .underlineStyle(.single)], toOccurencesOfString: "brown")
+        string.removeAttributes([.foregroundColor, .underlineStyle])
+        print("Updated: '\(string)'")
     }
 }
 

@@ -58,12 +58,27 @@ public extension NSMutableAttributedString {
     
     @discardableResult
     func removeAttributes(_ attrs: [TextAttribute.Style], in inRange: Range<String.Index>? = nil) -> NSMutableAttributedString {
-        
+        attrs.forEach { attr in
+            enumerateAttribute(attr, in: inRange) { attribute, range in
+                removeAttribute(attr.key, range: range)
+            }
+        }
         return self
     }
 }
 
 internal extension NSMutableAttributedString {
+    func enumerateAttribute(_ attr: TextAttribute.Style,
+                            options opts: NSAttributedString.EnumerationOptions = [],
+                            in inRange: Range<String.Index>? = nil, using block: (Any?, Range<String.Index>) -> Void) {
+        let nsRange = inRange.map { NSRange(location: string.distance(from: string.startIndex, to: $0.lowerBound), length: string.distance(from: $0.lowerBound, to: $0.upperBound)) } ?? NSRange(location: 0, length: length)
+        enumerateAttribute(attr.key, in: nsRange, options: opts) { attribute, range, stop in
+            let start = string.index(string.startIndex, offsetBy: range.location)
+            let end = string.index(string.startIndex, offsetBy: range.location + range.length)
+            block(attribute, start..<end)
+        }
+    }
+    
     func enumerateOccurrences(of aString: String,
                               options opts: String.CompareOptions = [],
                               in inRange: Range<String.Index>? = nil,

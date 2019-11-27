@@ -26,6 +26,11 @@ internal extension NSMutableAttributedString {
         let nsRange = range.map { NSRange(location: string.distance(from: string.startIndex, to: $0.lowerBound), length: string.distance(from: $0.lowerBound, to: $0.upperBound)) } ?? NSRange(location: 0, length: length)
         addAttributes(attrs, range: nsRange)
     }
+    
+    func removeAttribute(_ name: NSAttributedString.Key, range: Range<String.Index>? = nil) {
+        let nsRange = range.map { NSRange(location: string.distance(from: string.startIndex, to: $0.lowerBound), length: string.distance(from: $0.lowerBound, to: $0.upperBound)) } ?? NSRange(location: 0, length: length)
+        removeAttribute(name, range: nsRange)
+    }
 }
 
 public extension NSAttributedString {
