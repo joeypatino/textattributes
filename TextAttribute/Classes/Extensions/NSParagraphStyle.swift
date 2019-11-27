@@ -1,5 +1,3 @@
-import UIKit
-
 internal extension NSParagraphStyle {
     static func +(lhs: NSParagraphStyle, rhs: NSParagraphStyle) -> NSParagraphStyle {
         let defaultStyle = NSParagraphStyle.default

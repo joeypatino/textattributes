@@ -1,5 +1,3 @@
-import UIKit
-
 public extension NSMutableAttributedString {
     /// Adds the `TextAttribute` to the `NSMutableAttributedString` and returns self,
     /// optionally restricted to `inRange`

@@ -1,5 +1,3 @@
-import Foundation
-
 internal extension NSAttributedString {
     /// returns a mutable copy of the `NSAttributedString` instance
     var mutable: NSMutableAttributedString {

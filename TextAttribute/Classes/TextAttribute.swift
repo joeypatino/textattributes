@@ -1,5 +1,3 @@
-import UIKit
-
 public typealias NSStrikeThroughStyle = NSUnderlineStyle
 public enum TextAttribute: Codable {
     case font(UIFont)

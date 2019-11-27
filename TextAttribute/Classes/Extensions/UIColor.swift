@@ -1,5 +1,3 @@
-import UIKit
-
 internal extension UIColor {
     convenience init?(hex: String) {
         let r, g, b, a: CGFloat
