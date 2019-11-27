@@ -6,67 +6,67 @@ internal extension NSParagraphStyle {
         let updatedStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         updatedStyle.setParagraphStyle(lhs)
         
-        if updatedStyle.alignment == defaultStyle.alignment {
+        if rhs.alignment != defaultStyle.alignment {
             updatedStyle.alignment = rhs.alignment
         }
 
-        if updatedStyle.allowsDefaultTighteningForTruncation == defaultStyle.allowsDefaultTighteningForTruncation {
+        if rhs.allowsDefaultTighteningForTruncation != defaultStyle.allowsDefaultTighteningForTruncation {
             updatedStyle.allowsDefaultTighteningForTruncation = rhs.allowsDefaultTighteningForTruncation
         }
 
-        if updatedStyle.baseWritingDirection == defaultStyle.baseWritingDirection {
+        if rhs.baseWritingDirection != defaultStyle.baseWritingDirection {
             updatedStyle.baseWritingDirection = rhs.baseWritingDirection
         }
 
-        if updatedStyle.defaultTabInterval == defaultStyle.defaultTabInterval {
+        if rhs.defaultTabInterval != defaultStyle.defaultTabInterval {
             updatedStyle.defaultTabInterval = rhs.defaultTabInterval
         }
 
-        if updatedStyle.firstLineHeadIndent == defaultStyle.firstLineHeadIndent {
+        if rhs.firstLineHeadIndent != defaultStyle.firstLineHeadIndent {
             updatedStyle.firstLineHeadIndent = rhs.firstLineHeadIndent
         }
 
-        if updatedStyle.headIndent == defaultStyle.headIndent {
+        if rhs.headIndent != defaultStyle.headIndent {
             updatedStyle.headIndent = rhs.headIndent
         }
 
-        if updatedStyle.hyphenationFactor == defaultStyle.hyphenationFactor {
+        if rhs.hyphenationFactor != defaultStyle.hyphenationFactor {
             updatedStyle.hyphenationFactor = rhs.hyphenationFactor
         }
 
-        if updatedStyle.lineBreakMode == defaultStyle.lineBreakMode {
+        if rhs.lineBreakMode != defaultStyle.lineBreakMode {
             updatedStyle.lineBreakMode = rhs.lineBreakMode
         }
 
-        if updatedStyle.lineHeightMultiple == defaultStyle.lineHeightMultiple {
+        if rhs.lineHeightMultiple != defaultStyle.lineHeightMultiple {
             updatedStyle.lineHeightMultiple = rhs.lineHeightMultiple
         }
 
-        if updatedStyle.lineSpacing == defaultStyle.lineSpacing {
+        if rhs.lineSpacing != defaultStyle.lineSpacing {
             updatedStyle.lineSpacing = rhs.lineSpacing
         }
 
-        if updatedStyle.maximumLineHeight == defaultStyle.maximumLineHeight {
+        if rhs.maximumLineHeight != defaultStyle.maximumLineHeight {
             updatedStyle.maximumLineHeight = rhs.maximumLineHeight
         }
 
-        if updatedStyle.minimumLineHeight == defaultStyle.minimumLineHeight {
+        if rhs.minimumLineHeight != defaultStyle.minimumLineHeight {
             updatedStyle.minimumLineHeight = rhs.minimumLineHeight
         }
 
-        if updatedStyle.paragraphSpacing == defaultStyle.paragraphSpacing {
+        if rhs.paragraphSpacing != defaultStyle.paragraphSpacing {
             updatedStyle.paragraphSpacing = rhs.paragraphSpacing
         }
 
-        if updatedStyle.paragraphSpacingBefore == defaultStyle.paragraphSpacingBefore {
+        if rhs.paragraphSpacingBefore != defaultStyle.paragraphSpacingBefore {
             updatedStyle.paragraphSpacingBefore = rhs.paragraphSpacingBefore
         }
 
-        if updatedStyle.tabStops == defaultStyle.tabStops {
+        if rhs.tabStops != defaultStyle.tabStops {
             updatedStyle.tabStops = rhs.tabStops
         }
 
-        if updatedStyle.tailIndent == defaultStyle.tailIndent {
+        if rhs.tailIndent != defaultStyle.tailIndent {
             updatedStyle.tailIndent = rhs.tailIndent
         }
         

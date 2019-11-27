@@ -26,20 +26,20 @@ public enum TextAttribute: Codable {
         case .kern(let kerning):
             return kerning
         case .foregroundColor(let color):
-            return color.cgColor
+            return color
         case .backgroundColor(let color):
-            return color.cgColor
+            return color
         
         case .shadow(let shadow):
             return shadow
         case .underlineStyle(let style):
             return style.rawValue
         case .underlineColor(let color):
-            return color.cgColor
+            return color
         case .strikethroughStyle(let style):
             return style.rawValue
         case .strikethroughColor(let color):
-            return color.cgColor
+            return color
             
         case .lineBreakMode(let lineBreakMode):
             let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle

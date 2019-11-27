@@ -14,6 +14,7 @@ public extension NSMutableAttributedString {
                 let existingStyle = (result[attribute.key] as? NSParagraphStyle) ?? NSParagraphStyle.default
                 let value = attribute.value as! NSParagraphStyle
                 result[attribute.key] = existingStyle + value
+                return
             // switch for each other type so when new cases are added we don't forget to update this
             case .backgroundColor:
                 break
